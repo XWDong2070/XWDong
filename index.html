@@ -3,56 +3,164 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>我的个人主页</title>
+  <title>XWDong 的世界</title>
   <style>
+    /* 全局样式 */
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f8f9fa;
-      color: #333;
-      text-align: center;
       margin: 0;
+      font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* 欢迎区域 */
+    .hero {
+      text-align: center;
+      padding: 100px 20px;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: 3em;
+      margin: 0;
+      color: #00d8ff;
+      text-shadow: 0 0 10px rgba(0,216,255,0.5);
+    }
+
+    .hero p {
+      font-size: 1.3em;
+      margin: 20px auto;
+      max-width: 600px;
+      opacity: 0.9;
+    }
+
+    /* 头像 */
+    .avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 5px solid #00d8ff;
+      margin: 20px auto;
+      object-fit: cover;
+      box-shadow: 0 0 20px rgba(0,216,255,0.5);
+    }
+
+    /* 简介区域 */
+    .about {
       padding: 60px 20px;
-    }
-    .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
+      line-height: 1.8;
+      font-size: 1.1em;
     }
-    header {
-      margin-bottom: 40px;
+
+    .about h2 {
+      color: #00d8ff;
+      text-align: center;
+      margin-bottom: 30px;
     }
-    h1 {
-      color: #0d6efd;
+
+    /* 音乐控制按钮 */
+    .music-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #00d8ff;
+      color: #000;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 15px rgba(0,216,255,0.5);
+      z-index: 100;
     }
-    .intro {
-      font-size: 1.2em;
-      line-height: 1.6;
-      margin: 30px 0;
-    }
-    footer {
-      margin-top: 60px;
-      color: #6c757d;
-      font-size: 0.9em;
+
+    /* 响应式 */
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 2em;
+      }
+      .avatar {
+        width: 120px;
+        height: 120px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>🎉 欢迎来到我的世界！</h1>
-      <p>—— 由我亲手制作的第一个网页</p>
-    </header>
 
-    <section>
-      <img src="https://via.placeholder.com/200" alt="头像" style="border-radius: 50%; margin: 20px;" />
-      <div class="intro">
-        <p>你好，我是<strong>小明</strong>，一名热爱学习的探索者。</p>
-        <p>我喜欢编程、摄影和旅行。这个网站是我成长的起点。</p>
-      </div>
-    </section>
+  <!-- 欢迎区域 -->
+  <section class="hero">
+    <div class="hero-content">
+      <img src="https://avatars.githubusercontent.com/u/25634052" alt="XWDong" class="avatar">
+      <h1>🎉 欢迎来到 XWDong 的世界</h1>
+      <p>热爱探索，正在学习建站的追光者</p>
+    </div>
+  </section>
 
-    <footer>
-      <p>© 2025 我的第一个网站 | 使用 GitHub Pages 构建</p>
-    </footer>
-  </div>
+  <!-- 简介区域 -->
+  <section class="about">
+    <h2>关于我</h2>
+    <p>
+      你好，我是 XWDong，一名正在学习网页开发的初学者。
+      我喜欢尝试新事物，尤其是用代码创造属于自己的数字空间。
+      这个网站是我成长的起点，未来我会在这里分享我的学习笔记、项目和思考。
+    </p>
+    <p>
+      感谢你来访，希望我们都能在探索的路上越走越远 🌟
+    </p>
+  </section>
+
+  <!-- 背景音乐 -->
+  <audio id="bgMusic" loop>
+    <source src="https://cdn.pixabay.com/audio/2021/12/13/audio_6a1d4a3a4f.mp3" type="audio/mpeg">
+    您的浏览器不支持音频播放。
+  </audio>
+
+  <!-- 音乐播放按钮 -->
+  <button class="music-btn" onclick="toggleMusic()">🎵 暂停音乐</button>
+
+  <script>
+    const audio = document.getElementById('bgMusic');
+    const btn = document.querySelector('.music-btn');
+    
+    // 自动播放（部分浏览器需用户交互）
+    function playMusic() {
+      audio.play().catch(e => console.log('自动播放被阻止，请手动点击一次'));
+      document.body.removeEventListener('click', playMusic);
+    }
+    
+    // 添加点击事件触发播放（解决自动播放限制）
+    document.body.addEventListener('click', playMusic);
+    
+    // 控制音乐开关
+    function toggleMusic() {
+      if (audio.paused) {
+        audio.play();
+        btn.textContent = '🎵 暂停音乐';
+      } else {
+        audio.pause();
+        btn.textContent = '▶️ 播放音乐';
+      }
+    }
+  </script>
+
 </body>
 </html>
