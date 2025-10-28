@@ -3,165 +3,220 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>XWDong的世界</title>
+  <title>疯狂星期四，但今天有惊喜</title>
   <style>
-    /* 全局样式 */
-    body {
+    /* 清除所有默认边距和灰边 */
+    * {
       margin: 0;
-      font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-      background: linear-gradient(135deg, #141e30, #243b55);
-      color: #fff;
-      min-height: 100vh;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #fff; /* 白色背景，无灰边 */
+      font-family: 'Microsoft YaHei', sans-serif;
+      color: #333;
       overflow-x: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
     }
 
-    /* 欢迎区域 */
-    .hero {
+    .story {
       text-align: center;
-      padding: 100px 20px;
-      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
-      position: relative;
+      background: #fff8e1;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin-bottom: 20px;
     }
 
-    .hero::before {
-      content: '';
+    .story h2 {
+      color: #d32f2f;
+      font-size: 1.5em;
+    }
+
+    .hint {
+      text-align: center;
+      padding: 15px;
+      background: #e3f2fd;
+      color: #1565c0;
+      font-weight: bold;
+      font-size: 1.3em;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .gallery {
+      position: relative;
+      width: 100%;
+      height: 60vh;
+      max-width: 800px;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    #mainImage {
       position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.6);
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      opacity: 0.2;
+      border: 5px solid #ffd700;
+      border-radius: 10px;
+      box-shadow: 0 0 30px rgba(255,215,0,0.3);
+      transition: all 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
       z-index: 1;
     }
 
-    .hero-content {
-      position: relative;
-      z-index: 2;
-    }
-
-    .hero h1 {
-      font-size: 3em;
-      margin: 0;
-      color: #00d8ff;
-      text-shadow: 0 0 10px rgba(0,216,255,0.5);
-    }
-
-    .hero p {
-      font-size: 1.3em;
-      margin: 20px auto;
-      max-width: 600px;
-      opacity: 0.9;
-    }
-
-    /* 头像 */
-    .avatar {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      border: 5px solid #00d8ff;
-      margin: 20px auto;
+    .food {
+      position: absolute;
+      width: 120px;
+      height: 120px;
       object-fit: cover;
-      box-shadow: 0 0 20px rgba(0,216,255,0.5);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      cursor: move;
+      z-index: 10;
+      transition: transform 0.3s;
+      transform: rotate(var(--rotate));
     }
 
-    /* 简介区域 */
-    .about {
-      padding: 60px 20px;
-      max-width: 900px;
-      margin: 0 auto;
-      line-height: 1.8;
-      font-size: 1.1em;
+    .food:hover {
+      transform: rotate(var(--rotate)) scale(1.1);
     }
 
-    .about h2 {
-      color: #00d8ff;
-      text-align: center;
-      margin-bottom: 30px;
+    .food.moved {
+      opacity: 0.6;
+      filter: blur(1px);
     }
 
-    /* 音乐控制按钮 */
-    .music-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #00d8ff;
-      color: #000;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 0 15px rgba(0,216,255,0.5);
-      z-index: 100;
+    .revealed #mainImage {
+      width: 500px;
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.2);
     }
 
-    /* 响应式 */
-    @media (max-width: 600px) {
-      .hero h1 {
-        font-size: 2em;
-      }
-      .avatar {
-        width: 120px;
-        height: 120px;
-      }
+    .revealed .hint {
+      color: #d32f2f;
+      font-size: 1.5em;
     }
   </style>
 </head>
 <body>
 
-  <!-- 欢迎区域 -->
-  <section class="hero">
-    <div class="hero-content">
-      <img src="https://avatars.githubusercontent.com/u/25634052" alt="XWDong" class="avatar">
-      <h1>🎉 欢迎来到 XWDong 的世界</h1>
-      <p>热爱探索，正在学习建站的追光者</p>
-    </div>
-  </section>
-
-  <!-- 简介区域 -->
-  <section class="about">
-    <h2>关于我</h2>
+  <!-- 小段子 -->
+  <div class="story">
+    <h2>今天是疯狂星期四</h2>
     <p>
-      你好，我是 XWDong，一名正在学习网页开发的初学者。
-      我喜欢尝试新事物，尤其是用代码创造属于自己的数字空间。
-      这个网站是我成长的起点，未来我会在这里分享我的学习笔记、项目和思考。
+      我在大街上走着，突然肚子饿了。<br>
+      看到前面有家 KFC，我冲了进去。<br>
+      店员问我：“先生要吃什么？”<br>
+      我说：“来一份疯狂星期四。”<br>
+      店员说：“今天没有疯狂星期四。”<br>
+      我说：“怎么可能？V 我 50，我告诉你真相。”
     </p>
-    <p>
-      感谢你来访，希望我们都能在探索的路上越走越远 🌟
-    </p>
-  </section>
+  </div>
 
-  <!-- 背景音乐 -->
-  <audio id="bgMusic" loop>
-    <source src="https://cdn.pixabay.com/audio/2021/12/13/audio_6a1d4a3a4f.mp3" type="audio/mpeg">
-    您的浏览器不支持音频播放。
-  </audio>
+  <!-- 提示 -->
+  <div class="hint" id="hint">🍔 滑动炸鸡，解锁金钥匙！</div>
 
-  <!-- 音乐播放按钮 -->
-  <button class="music-btn" onclick="toggleMusic()">🎵 暂停音乐</button>
+  <!-- 图片区 -->
+  <div class="gallery" id="gallery">
+    <!-- 主图：金钥匙财报 -->
+    <img src="https://raw.githubusercontent.com/XWDong2070/XWDong/main/%E9%87%91%E9%92%A5%E8%B4%A2%E6%8A%A5.jpg" 
+         alt="金钥匙财报" 
+         id="mainImage">
+
+    <!-- 炸鸡汉堡图（可替换为真实图片） -->
+    <img src="https://picsum.photos/id/703/200/200" class="food" style="top:40%; left:40%; --rotate: -20deg;">
+    <img src="https://picsum.photos/id/564/200/200" class="food" style="top:45%; left:55%; --rotate: 15deg;">
+    <img src="https://picsum.photos/id/965/200/200" class="food" style="top:35%; left:50%; --rotate: -10deg;">
+    <img src="https://picsum.photos/id/481/200/200" class="food" style="top:50%; left:45%; --rotate: 25deg;">
+    <img src="https://picsum.photos/id/292/200/200" class="food" style="top:55%; left:35%; --rotate: -5deg;">
+    <img src="https://picsum.photos/id/562/200/200" class="food" style="top:60%; left:50%; --rotate: 10deg;">
+  </div>
 
   <script>
-    const audio = document.getElementById('bgMusic');
-    const btn = document.querySelector('.music-btn');
-    
-    // 自动播放（部分浏览器需用户交互）
-    function playMusic() {
-      audio.play().catch(e => console.log('自动播放被阻止，请手动点击一次'));
-      document.body.removeEventListener('click', playMusic);
-    }
-    
-    // 添加点击事件触发播放（解决自动播放限制）
-    document.body.addEventListener('click', playMusic);
-    
-    // 控制音乐开关
-    function toggleMusic() {
-      if (audio.paused) {
-        audio.play();
-        btn.textContent = '🎵 暂停音乐';
-      } else {
-        audio.pause();
-        btn.textContent = '▶️ 播放音乐';
-      }
-    }
+    const foods = document.querySelectorAll('.food');
+    const mainImage = document.getElementById('mainImage');
+    const gallery = document.getElementById('gallery');
+    const hint = document.getElementById('hint');
+    let movedCount = 0;
+
+    foods.forEach(img => {
+      let isDragging = false;
+      let offsetX, offsetY;
+
+      img.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        offsetX = e.clientX - img.getBoundingClientRect().left;
+        offsetY = e.clientY - img.getBoundingClientRect().top;
+        img.style.zIndex = 20;
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const x = e.clientX - offsetX;
+        const y = e.clientY - offsetY;
+        img.style.left = `${x}px`;
+        img.style.top = `${y}px`;
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (isDragging) {
+          isDragging = false;
+          img.style.zIndex = 10;
+          img.classList.add('moved');
+          movedCount++;
+
+          if (movedCount >= 3) {
+            gallery.classList.add('revealed');
+            hint.textContent = "🎉 恭喜！金钥匙财报已解锁！";
+          }
+        }
+      });
+
+      // 手机端触摸支持
+      img.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        isDragging = true;
+        offsetX = touch.clientX - img.getBoundingClientRect().left;
+        offsetY = touch.clientY - img.getBoundingClientRect().top;
+        img.style.zIndex = 20;
+        e.preventDefault();
+      });
+
+      document.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const touch = e.touches[0];
+        const x = touch.clientX - offsetX;
+        const y = touch.clientY - offsetY;
+        img.style.left = `${x}px`;
+        img.style.top = `${y}px`;
+        e.preventDefault();
+      });
+
+      document.addEventListener('touchend', () => {
+        if (isDragging) {
+          isDragging = false;
+          img.style.zIndex = 10;
+          img.classList.add('moved');
+          movedCount++;
+
+          if (movedCount >= 3) {
+            gallery.classList.add('revealed');
+            hint.textContent = "🎉 恭喜！金钥匙财报已解锁！";
+          }
+        }
+      });
+    });
   </script>
 
 </body>
 </html>
-
