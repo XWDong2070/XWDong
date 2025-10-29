@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>疯狂星期四，但今天有惊喜</title>
   <style>
-    /* 清除所有默认边距和灰边 */
+    /* 清除默认样式 */
     * {
       margin: 0;
       padding: 0;
@@ -13,7 +13,7 @@
     }
 
     body {
-      background: #fff; /* 白色背景，无灰边 */
+      background: #fff;
       font-family: 'Microsoft YaHei', sans-serif;
       color: #333;
       overflow-x: hidden;
@@ -25,30 +25,22 @@
       user-select: none;
     }
 
-    .story {
+    .content {
       text-align: center;
-      background: #fff8e1;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
       max-width: 600px;
-      margin-bottom: 20px;
+      padding: 10px;
     }
 
-    .story h2 {
+    .content h1 {
       color: #d32f2f;
-      font-size: 1.5em;
+      font-size: 1.8em;
+      margin-bottom: 10px;
     }
 
-    .hint {
-      text-align: center;
-      padding: 15px;
-      background: #e3f2fd;
-      color: #1565c0;
-      font-weight: bold;
-      font-size: 1.3em;
-      border-radius: 10px;
-      margin-bottom: 20px;
+    .content p {
+      line-height: 1.6;
+      color: #555;
     }
 
     .gallery {
@@ -79,145 +71,164 @@
       width: 120px;
       height: 120px;
       object-fit: cover;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       cursor: move;
       z-index: 10;
-      transition: transform 0.3s;
+      transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
       transform: rotate(var(--rotate));
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
-    .food:hover {
-      transform: rotate(var(--rotate)) scale(1.1);
-    }
-
-    .food.moved {
-      opacity: 0.6;
-      filter: blur(1px);
-    }
-
+    /* 主图放大样式 */
     .revealed #mainImage {
       width: 500px;
       opacity: 1;
       transform: translate(-50%, -50%) scale(1.2);
     }
 
-    .revealed .hint {
-      color: #d32f2f;
-      font-size: 1.5em;
+    /* 小图消失动画 */
+    .revealed .food {
+      opacity: 0;
+      transform: rotate(var(--rotate)) scale(0.5) translateY(-100px);
+      pointer-events: none; /* 防止放大后还能拖动 */
     }
   </style>
 </head>
 <body>
 
-  <!-- 小段子 -->
-  <div class="story">
-    <h2>今天是疯狂星期四</h2>
-    <p>
-      我在大街上走着，突然肚子饿了。<br>
-      看到前面有家 KFC，我冲了进去。<br>
-      店员问我：“先生要吃什么？”<br>
-      我说：“来一份疯狂星期四。”<br>
-      店员说：“今天没有疯狂星期四。”<br>
-      我说：“怎么可能？V 我 50，我告诉你真相。”
-    </p>
-  </div>
+<div class="content">
+  <h1>今天是疯狂星期四？</h1>
+  <p>我在大街上走着，突然肚子饿了。<br>
+     看到前面有家 KFC，我冲了进去。<br>
+     店员问我：“先生要吃什么？”<br>
+     我说：“来一份疯狂星期四。”<br>
+     店员说：“今天没有疯狂星期四。”<br>
+     我说：“怎么可能？V 我 50，我告诉你真相。”
+  </p>
+  <p>现在，你需要移开遮挡的炸鸡汉堡，才能看到背后的秘密财报……</p>
+</div>
 
-  <!-- 提示 -->
-  <div class="hint" id="hint">🍔 滑动炸鸡，解锁金钥匙！</div>
+<div class="gallery" id="gallery">
+  <!-- 主图：金钥匙财报 -->
+  <img src="https://raw.githubusercontent.com/XWDong2070/XWDong/main/%E9%87%91%E9%92%A5%E8%B4%A2%E6%8A%A5.jpg" 
+       alt="金钥匙财报" 
+       id="mainImage">
 
-  <!-- 图片区 -->
-  <div class="gallery" id="gallery">
-    <!-- 主图：金钥匙财报 -->
-    <img src="https://raw.githubusercontent.com/XWDong2070/XWDong/main/%E9%87%91%E9%92%A5%E8%B4%A2%E6%8A%A5.jpg" 
-         alt="金钥匙财报" 
-         id="mainImage">
+  <!-- 炸鸡汉堡图 -->
+  <img src="https://picsum.photos/id/703/200/200" class="food" style="top:40%; left:40%; --rotate: -20deg;">
+  <img src="https://picsum.photos/id/564/200/200" class="food" style="top:45%; left:55%; --rotate: 15deg;">
+  <img src="https://picsum.photos/id/965/200/200" class="food" style="top:35%; left:50%; --rotate: -10deg;">
+  <img src="https://picsum.photos/id/481/200/200" class="food" style="top:50%; left:45%; --rotate: 25deg;">
+  <img src="https://picsum.photos/id/292/200/200" class="food" style="top:55%; left:35%; --rotate: -5deg;">
+  <img src="https://picsum.photos/id/562/200/200" class="food" style="top:60%; left:50%; --rotate: 10deg;">
+</div>
 
-    <!-- 炸鸡汉堡图（可替换为真实图片） -->
-    <img src="https://picsum.photos/id/703/200/200" class="food" style="top:40%; left:40%; --rotate: -20deg;">
-    <img src="https://picsum.photos/id/564/200/200" class="food" style="top:45%; left:55%; --rotate: 15deg;">
-    <img src="https://picsum.photos/id/965/200/200" class="food" style="top:35%; left:50%; --rotate: -10deg;">
-    <img src="https://picsum.photos/id/481/200/200" class="food" style="top:50%; left:45%; --rotate: 25deg;">
-    <img src="https://picsum.photos/id/292/200/200" class="food" style="top:55%; left:35%; --rotate: -5deg;">
-    <img src="https://picsum.photos/id/562/200/200" class="food" style="top:60%; left:50%; --rotate: 10deg;">
-  </div>
+<script>
+  const foods = document.querySelectorAll('.food');
+  const mainImage = document.getElementById('mainImage');
+  const gallery = document.getElementById('gallery');
+  let movedCount = 0;
+  let isRevealed = false;
 
-  <script>
-    const foods = document.querySelectorAll('.food');
-    const mainImage = document.getElementById('mainImage');
-    const gallery = document.getElementById('gallery');
-    const hint = document.getElementById('hint');
-    let movedCount = 0;
+  // 拖动逻辑
+  foods.forEach(img => {
+    let isDragging = false;
+    let offsetX, offsetY;
 
-    foods.forEach(img => {
-      let isDragging = false;
-      let offsetX, offsetY;
-
-      img.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        offsetX = e.clientX - img.getBoundingClientRect().left;
-        offsetY = e.clientY - img.getBoundingClientRect().top;
-        img.style.zIndex = 20;
-      });
-
-      document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        const x = e.clientX - offsetX;
-        const y = e.clientY - offsetY;
-        img.style.left = `${x}px`;
-        img.style.top = `${y}px`;
-      });
-
-      document.addEventListener('mouseup', () => {
-        if (isDragging) {
-          isDragging = false;
-          img.style.zIndex = 10;
-          img.classList.add('moved');
-          movedCount++;
-
-          if (movedCount >= 3) {
-            gallery.classList.add('revealed');
-            hint.textContent = "🎉 恭喜！金钥匙财报已解锁！";
-          }
-        }
-      });
-
-      // 手机端触摸支持
-      img.addEventListener('touchstart', (e) => {
-        const touch = e.touches[0];
-        isDragging = true;
-        offsetX = touch.clientX - img.getBoundingClientRect().left;
-        offsetY = touch.clientY - img.getBoundingClientRect().top;
-        img.style.zIndex = 20;
-        e.preventDefault();
-      });
-
-      document.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        const touch = e.touches[0];
-        const x = touch.clientX - offsetX;
-        const y = touch.clientY - offsetY;
-        img.style.left = `${x}px`;
-        img.style.top = `${y}px`;
-        e.preventDefault();
-      });
-
-      document.addEventListener('touchend', () => {
-        if (isDragging) {
-          isDragging = false;
-          img.style.zIndex = 10;
-          img.classList.add('moved');
-          movedCount++;
-
-          if (movedCount >= 3) {
-            gallery.classList.add('revealed');
-            hint.textContent = "🎉 恭喜！金钥匙财报已解锁！快来注册吧";
-          }
-        }
-      });
+    img.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      offsetX = e.clientX - img.getBoundingClientRect().left;
+      offsetY = e.clientY - img.getBoundingClientRect().top;
+      img.style.zIndex = 20;
     });
-  </script>
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const x = e.clientX - offsetX;
+      const y = e.clientY - offsetY;
+      img.style.left = `${x}px`;
+      img.style.top = `${y}px`;
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        img.style.zIndex = 10;
+        img.classList.add('moved');
+        movedCount++;
+
+        // 移开3张后，主图微微放大，提示点击
+        if (movedCount >= 3 && !isRevealed) {
+          mainImage.style.opacity = '0.6';
+          mainImage.style.width = '200px';
+        }
+
+        // 全部移开 → 自动触发
+        if (movedCount === foods.length && !isRevealed) {
+          revealMainImage();
+        }
+      }
+    });
+
+    // 手机端
+    img.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      isDragging = true;
+      offsetX = touch.clientX - img.getBoundingClientRect().left;
+      offsetY = touch.clientY - img.getBoundingClientRect().top;
+      img.style.zIndex = 20;
+      e.preventDefault();
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const touch = e.touches[0];
+      const x = touch.clientX - offsetX;
+      const y = touch.clientY - offsetY;
+      img.style.left = `${x}px`;
+      img.style.top = `${y}px`;
+      e.preventDefault();
+    });
+
+    document.addEventListener('touchend', () => {
+      if (isDragging) {
+        isDragging = false;
+        img.style.zIndex = 10;
+        img.classList.add('moved');
+        movedCount++;
+
+        if (movedCount >= 3 && !isRevealed) {
+          mainImage.style.opacity = '0.6';
+          mainImage.style.width = '200px';
+        }
+
+        if (movedCount === foods.length && !isRevealed) {
+          revealMainImage();
+        }
+      }
+    });
+  });
+
+  // 点击主图触发放大
+  mainImage.addEventListener('click', () => {
+    if (movedCount >= 3 && !isRevealed) {
+      revealMainImage();
+    }
+  });
+
+  mainImage.addEventListener('touchend', (e) => {
+    if (movedCount >= 3 && !isRevealed) {
+      revealMainImage();
+    }
+    e.preventDefault();
+  });
+
+  // 🔥 统一触发函数：放大主图 + 隐藏所有小图
+  function revealMainImage() {
+    gallery.classList.add('revealed');
+    isRevealed = true;
+  }
+</script>
 
 </body>
 </html>
-
