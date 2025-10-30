@@ -12,10 +12,11 @@
       box-sizing: border-box;
     }
 
+    /* 夜空背景 */
     body {
-      background: #fff;
+      background: linear-gradient(135deg, #120b2a, #1e1436, #0d091a);
       font-family: 'Microsoft YaHei', sans-serif;
-      color: #333;
+      color: #fff;
       overflow-x: hidden;
       height: 100vh;
       display: flex;
@@ -23,24 +24,82 @@
       align-items: center;
       justify-content: center;
       user-select: none;
+      position: relative;
     }
 
+    /* 星空粒子层 */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image:
+        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
+        radial-gradient(white, rgba(255,255,255,.1) 1px, transparent 3px);
+      background-size: 500px 500px, 300px 300px, 100px 100px;
+      background-position: 0 0, 0 0, 0 0;
+      pointer-events: none;
+      z-index: -2;
+      opacity: 0.6;
+    }
+
+    /* 流动星云光晕 */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(ellipse at center, transparent 0%, rgba(70, 20, 120, 0.4) 70%, rgba(0, 0, 30, 0.8));
+      z-index: -3;
+      pointer-events: none;
+      animation: glowDrift 30s infinite linear;
+    }
+
+    @keyframes glowDrift {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* 闪烁小星星 */
+    .star {
+      position: fixed;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+      z-index: -1;
+      animation: twinkle 3s infinite ease-in-out alternate;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.2; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.2); }
+    }
+
+    /* 内容区域 */
     .content {
       text-align: center;
       margin-bottom: 20px;
       max-width: 600px;
       padding: 10px;
+      z-index: 10;
+      color: #fff;
+      text-shadow: 0 0 5px rgba(0,0,0,0.5);
     }
 
     .content h1 {
-      color: #d32f2f;
+      color: #ffd700;
       font-size: 1.8em;
       margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
     }
 
     .content p {
       line-height: 1.6;
-      color: #555;
+      color: #ddd;
+      text-shadow: 0 0 3px rgba(0,0,0,0.5);
     }
 
     .gallery {
@@ -50,6 +109,7 @@
       max-width: 800px;
       overflow: hidden;
       background: transparent;
+      z-index: 10;
     }
 
     #mainImage {
@@ -66,14 +126,12 @@
       z-index: 1;
     }
 
-    /* 🔥 金光闪闪特效 */
     @keyframes shine {
       0% { box-shadow: 0 0 15px gold; }
       50% { box-shadow: 0 0 40px gold, 0 0 60px #ff6b00; }
       100% { box-shadow: 0 0 15px gold; }
     }
 
-    /* 主图放大样式 + 金光闪闪 */
     .revealed #mainImage {
       width: 500px;
       opacity: 1;
@@ -94,14 +152,12 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
-    /* 小图消失动画 */
     .revealed .food {
       opacity: 0;
       transform: rotate(var(--rotate)) scale(0.5) translateY(-100px);
       pointer-events: none;
     }
 
-    /* 💬 提示文字样式（增强版） */
     #tipText {
       position: absolute;
       bottom: 30px;
@@ -128,27 +184,97 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* 音乐控制按钮 */
+    /* 音乐开关按钮 */
     #music-btn {
       position: fixed;
       top: 20px;
       right: 20px;
       background: rgba(255,215,0,0.2);
       border: 1px solid #ffd700;
-      color: #333;
+      color: #fff;
       padding: 8px 12px;
       border-radius: 20px;
       font-size: 14px;
       cursor: pointer;
       backdrop-filter: blur(5px);
+      width: 60px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 100;
     }
 
     #music-btn:hover {
       background: rgba(255,215,0,0.4);
     }
+
+    #music-btn span {
+      font-size: 1.1em;
+    }
+
+    /* 流星 */
+    .meteor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 2px;
+      height: 80px;
+      background: linear-gradient(transparent, rgba(255,255,255,0.8), transparent);
+      transform-origin: top;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0;
+      filter: blur(1px);
+    }
+
+    .meteor::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -2px;
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #fff, 0 0 20px #ff9d00;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translate(var(--start-x), var(--start-y)) rotate(var(--rotate)) scaleY(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50vw, 100vh) rotate(var(--rotate)) scaleY(1);
+        opacity: 0;
+      }
+    }
+
+    .meteor {
+      animation: fall var(--duration) ease-out forwards;
+    }
   </style>
 </head>
 <body>
+
+<!-- 动态星星 -->
+<script>
+  // 创建 100 颗闪烁的星星
+  for (let i = 0; i < 100; i++) {
+    const star = document.createElement('div');
+    star.classList.add('star');
+    star.style.left = `${Math.random() * 100}vw`;
+    star.style.top = `${Math.random() * 100}vh`;
+    star.style.animationDelay = `${Math.random() * 3}s`;
+    document.body.appendChild(star);
+  }
+</script>
 
 <div class="content">
   <h1>今天是疯狂星期四？</h1>
@@ -159,7 +285,7 @@
      店员说：“今天没有疯狂星期四。”<br>
      我说：“怎么可能？V 我 50，我告诉你真相。”
   </p>
-  <p>现在，你需要移开遮挡的炸鸡汉堡，才能看到背后的秘密财报……</p>
+  <p>移开图片，下面有惊喜哦！！！</p>
 </div>
 
 <div class="gallery" id="gallery">
@@ -168,26 +294,28 @@
        alt="金钥匙财报" 
        id="mainImage">
 
-  <!-- 炸鸡汉堡图 -->
-  <img src="https://picsum.photos/id/703/200/200" class="food" style="top:40%; left:40%; --rotate: -20deg;">
-  <img src="https://picsum.photos/id/564/200/200" class="food" style="top:45%; left:55%; --rotate: 15deg;">
-  <img src="https://picsum.photos/id/965/200/200" class="food" style="top:35%; left:50%; --rotate: -10deg;">
-  <img src="https://picsum.photos/id/481/200/200" class="food" style="top:50%; left:45%; --rotate: 25deg;">
-  <img src="https://picsum.photos/id/292/200/200" class="food" style="top:55%; left:35%; --rotate: -5deg;">
-  <img src="https://picsum.photos/id/562/200/200" class="food" style="top:60%; left:50%; --rotate: 10deg;">
+  <!-- 真实炸鸡汉堡美食图 -->
+  <img src="https://cdn.jsdelivr.net/gh/XWDong2070/XWDong@main/kfc-burger1.jpg" class="food" style="top:40%; left:40%; --rotate: -20deg;" alt="汉堡">
+  <img src="https://cdn.jsdelivr.net/gh/XWDong2070/XWDong@main/kfc-chicken-nuggets.jpg" class="food" style="top:45%; left:55%; --rotate: 15deg;" alt="炸鸡块">
+  <img src="https://cdn.jsdelivr.net/gh/XWDong2070/XWDong@main/kfc-fries.jpg" class="food" style="top:35%; left:50%; --rotate: -10deg;" alt="薯条">
+  <img src="https://cdn.jsdelivr.net/gh/XWDong2070/XWDong@main/kfc-chicken-leg.jpg" class="food" style="top:50%; left:45%; --rotate: 25deg;" alt="炸鸡腿">
+  <img src="https://cdn.jsdelivr.net/gh/XWDong2070/XWDong@main/kfc-coke.jpg" class="food" style="top:55%; left:35%; --rotate: -5deg;" alt="可乐">
+  <img src="https://cdn.jsdelivr.net/gh/XWDong2070/XWDong@main/kfc-double-burger.jpg" class="food" style="top:60%; left:50%; --rotate: 10deg;" alt="双层汉堡">
 </div>
 
 <!-- 💬 提示文字 -->
 <div id="tipText">来都来了，关注一下吧～</div>
 
-<!-- 🔊 背景音乐（使用 jsDelivr 直链） -->
+<!-- 🔊 背景音乐 -->
 <audio id="bgMusic" loop>
   <source src="https://cdn.jsdelivr.net/gh/XWDong2070/XWDong@main/pianocd%20-%20Windy%20Hill%20(%E9%A3%8E%E4%B9%8B%E8%B0%B7).mp3" type="audio/mpeg">
   您的浏览器不支持音频播放。
 </audio>
 
 <!-- 🔘 音乐开关按钮 -->
-<button id="music-btn" onclick="toggleMusic()">🎵 音乐开</button>
+<button id="music-btn">
+  <span>🎵</span>
+</button>
 
 <script>
   const foods = document.querySelectorAll('.food');
@@ -198,18 +326,16 @@
   let movedCount = 0;
   let isRevealed = false;
 
-  // --- 音乐控制 ---
   function toggleMusic() {
     if (bgMusic.paused) {
       bgMusic.play().then(() => {
-        musicBtn.textContent = '🔊 音乐关';
+        musicBtn.innerHTML = '🔊';
       }).catch(e => {
-        console.log("播放被阻止:", e);
-        alert("请先与页面交互（如点击）后再尝试播放音乐。");
+        console.log("播放失败:", e);
       });
     } else {
       bgMusic.pause();
-      musicBtn.textContent = '🎵 音乐开';
+      musicBtn.innerHTML = '🎵';
     }
   }
 
@@ -218,7 +344,7 @@
     if (bgMusic.paused && isRevealed) {
       bgMusic.play().catch(() => {});
     }
-  }, { once: false });
+  }, { once: true });
 
   // 拖动逻辑
   foods.forEach(img => {
@@ -297,7 +423,6 @@
     });
   });
 
-  // 点击主图触发放大
   mainImage.addEventListener('click', () => {
     if (movedCount >= 3 && !isRevealed) {
       revealMainImage();
@@ -311,17 +436,47 @@
     e.preventDefault();
   });
 
-  // 🔥 统一触发函数
   function revealMainImage() {
     if (isRevealed) return;
     isRevealed = true;
     gallery.classList.add('revealed');
 
-    // 延迟播放音乐
     setTimeout(() => {
-      bgMusic.play().catch(e => console.log("自动播放被阻止:", e));
+      if (bgMusic.paused) {
+        bgMusic.play().catch(() => {});
+      }
     }, 500);
   }
+
+  musicBtn.addEventListener('click', toggleMusic);
+
+  // 创建流星
+  function createMeteor() {
+    const meteor = document.createElement('div');
+    meteor.classList.add('meteor');
+
+    // 随机位置（从右上到左下）
+    const startX = Math.random() * 50 + 70; // 从右侧 70%-100% 进入
+    const startY = Math.random() * 30;      // 从顶部 0%-30% 开始
+
+    meteor.style.setProperty('--start-x', `${startX}vw`);
+    meteor.style.setProperty('--start-y', `${startY}vh`);
+    meteor.style.setProperty('--rotate', `-45deg`);
+    meteor.style.setProperty('--duration', `${Math.random() * 2 + 2}s`);
+
+    document.body.appendChild(meteor);
+
+    // 动画完成后移除
+    setTimeout(() => {
+      meteor.remove();
+    }, 4000);
+  }
+
+  // 每 3-8 秒随机出现一颗流星
+  setInterval(createMeteor, Math.random() * 5000 + 3000);
+
+  // 初始延迟出现第一颗
+  setTimeout(createMeteor, 2000);
 </script>
 
 </body>
