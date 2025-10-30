@@ -66,6 +66,21 @@
       z-index: 1;
     }
 
+    /* 🔥 金光闪闪特效 */
+    @keyframes shine {
+      0% { box-shadow: 0 0 15px gold; }
+      50% { box-shadow: 0 0 40px gold, 0 0 60px #ff6b00; }
+      100% { box-shadow: 0 0 15px gold; }
+    }
+
+    /* 主图放大样式 + 金光闪闪 */
+    .revealed #mainImage {
+      width: 500px;
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.2);
+      animation: shine 1.5s infinite;
+    }
+
     .food {
       position: absolute;
       width: 120px;
@@ -79,18 +94,57 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
-    /* 主图放大样式 */
-    .revealed #mainImage {
-      width: 500px;
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1.2);
-    }
-
     /* 小图消失动画 */
     .revealed .food {
       opacity: 0;
       transform: rotate(var(--rotate)) scale(0.5) translateY(-100px);
-      pointer-events: none; /* 防止放大后还能拖动 */
+      pointer-events: none;
+    }
+
+    /* 💬 提示文字样式（增强版） */
+    #tipText {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(0, 0, 0, 0.7);
+      color: #ffd700;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 1.3em;
+      font-weight: bold;
+      opacity: 0;
+      z-index: 100;
+      pointer-events: none;
+      white-space: nowrap;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+      transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .revealed #tipText {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* 音乐控制按钮 */
+    #music-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255,215,0,0.2);
+      border: 1px solid #ffd700;
+      color: #333;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      backdrop-filter: blur(5px);
+    }
+
+    #music-btn:hover {
+      background: rgba(255,215,0,0.4);
     }
   </style>
 </head>
@@ -123,12 +177,48 @@
   <img src="https://picsum.photos/id/562/200/200" class="food" style="top:60%; left:50%; --rotate: 10deg;">
 </div>
 
+<!-- 💬 提示文字 -->
+<div id="tipText">来都来了，关注一下吧～</div>
+
+<!-- 🔊 背景音乐（使用 jsDelivr 直链） -->
+<audio id="bgMusic" loop>
+  <source src="https://cdn.jsdelivr.net/gh/XWDong2070/XWDong@main/pianocd%20-%20Windy%20Hill%20(%E9%A3%8E%E4%B9%8B%E8%B0%B7).mp3" type="audio/mpeg">
+  您的浏览器不支持音频播放。
+</audio>
+
+<!-- 🔘 音乐开关按钮 -->
+<button id="music-btn" onclick="toggleMusic()">🎵 音乐开</button>
+
 <script>
   const foods = document.querySelectorAll('.food');
   const mainImage = document.getElementById('mainImage');
   const gallery = document.getElementById('gallery');
+  const bgMusic = document.getElementById('bgMusic');
+  const musicBtn = document.getElementById('music-btn');
   let movedCount = 0;
   let isRevealed = false;
+
+  // --- 音乐控制 ---
+  function toggleMusic() {
+    if (bgMusic.paused) {
+      bgMusic.play().then(() => {
+        musicBtn.textContent = '🔊 音乐关';
+      }).catch(e => {
+        console.log("播放被阻止:", e);
+        alert("请先与页面交互（如点击）后再尝试播放音乐。");
+      });
+    } else {
+      bgMusic.pause();
+      musicBtn.textContent = '🎵 音乐开';
+    }
+  }
+
+  // 用户首次点击后允许自动播放
+  document.addEventListener('click', () => {
+    if (bgMusic.paused && isRevealed) {
+      bgMusic.play().catch(() => {});
+    }
+  }, { once: false });
 
   // 拖动逻辑
   foods.forEach(img => {
@@ -157,13 +247,11 @@
         img.classList.add('moved');
         movedCount++;
 
-        // 移开3张后，主图微微放大，提示点击
         if (movedCount >= 3 && !isRevealed) {
           mainImage.style.opacity = '0.6';
           mainImage.style.width = '200px';
         }
 
-        // 全部移开 → 自动触发
         if (movedCount === foods.length && !isRevealed) {
           revealMainImage();
         }
@@ -223,10 +311,16 @@
     e.preventDefault();
   });
 
-  // 🔥 统一触发函数：放大主图 + 隐藏所有小图
+  // 🔥 统一触发函数
   function revealMainImage() {
-    gallery.classList.add('revealed');
+    if (isRevealed) return;
     isRevealed = true;
+    gallery.classList.add('revealed');
+
+    // 延迟播放音乐
+    setTimeout(() => {
+      bgMusic.play().catch(e => console.log("自动播放被阻止:", e));
+    }, 500);
   }
 </script>
 
